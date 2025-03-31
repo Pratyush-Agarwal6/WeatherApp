@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/YourUsername/WeatherApp.git'
+                git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
         stage('Build Docker Image') {
