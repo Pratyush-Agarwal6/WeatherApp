@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
+                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp'
             }
         }
 
