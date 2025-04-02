@@ -12,12 +12,11 @@ pipeline {
         stage('Deploy to NGINX') {
             steps {
                 echo 'Deploying WeatherApp to NGINX...'
-                bat '''
-                net stop nginx
-                rmdir /s /q C:\\nginx\\html
-                mkdir C:\\nginx\\html
-                xcopy /E /I * C:\\nginx\\html\\
-                net start nginx
+                sh '''
+                sudo systemctl stop nginx
+                sudo rm -rf /usr/share/nginx/html/*
+                sudo cp -r * /usr/share/nginx/html/
+                sudo systemctl start nginx
                 '''
             }
         }
