@@ -15,7 +15,10 @@ pipeline {
                 bat '''
                 rmdir /s /q C:\\nginx\\html
                 mkdir C:\\nginx\\html
-                xcopy /E /I *.html *.css *.js *.jpg C:\\nginx\\html\\
+                xcopy /E /I *.html C:\\nginx\\html\\
+                xcopy /E /I *.css C:\\nginx\\html\\
+                xcopy /E /I *.js C:\\nginx\\html\\
+                xcopy /E /I *.jpg C:\\nginx\\html\\
                 '''
             }
         }
