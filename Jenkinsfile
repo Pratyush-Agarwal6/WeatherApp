@@ -9,20 +9,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Deploy to NGINX') {
             steps {
-                echo 'Building the WeatherApp...'
-                sh 'docker build -t weather-app:latest .'
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                echo 'Running the WeatherApp container...'
-                sh '''
-                docker stop weather-app || true
-                docker rm weather-app || true
-                docker run -d -p 8080:80 --name weather-app weather-app:latest
+                echo 'Deploying WeatherApp to NGINX...'
+                bat '''
+                net stop nginx
+                rmdir /s /q C:\\nginx\\html
+                mkdir C:\\nginx\\html
+                xcopy /E /I * C:\\nginx\\html\\
+                net start nginx
                 '''
             }
         }
