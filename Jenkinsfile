@@ -19,7 +19,11 @@ pipeline {
         stage('Run Container') {
             steps {
                 echo 'Running the WeatherApp container...'
-                sh 'docker run -d -p 8080:80 --name weather-app weather-app:latest'
+                sh '''
+                docker stop weather-app || true
+                docker rm weather-app || true
+                docker run -d -p 8080:80 --name weather-app weather-app:latest
+                '''
             }
         }
     }
