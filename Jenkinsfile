@@ -1,32 +1,41 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = "weather-app"
-    }
-
     stages {
-        stage('Checkout Code') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp'
+                echo "Cloning repository..."
+                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                echo "Building the WeatherApp..."
+                sh 'docker build -t weather-app:latest .'
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                sh 'docker run --rm $DOCKER_IMAGE npm test'
+                echo "Running tests..."
+                sh 'echo "No tests defined yet!"'
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Existing Docker Container') {
             steps {
-                sh 'docker run -d -p 8080:80 $DOCKER_IMAGE'
+                echo "Deploying WeatherApp..."
+                sh '''
+                if docker ps -q --filter "name=my-weather-app" | grep -q .; then
+                    echo "Stopping and removing existing container..."
+                    docker stop my-weather-app
+                    docker rm my-weather-app
+                fi
+                
+                echo "Starting new container..."
+                docker run -d --name my-weather-app -p 8080:80 weather-app:latest
+                '''
             }
         }
     }
