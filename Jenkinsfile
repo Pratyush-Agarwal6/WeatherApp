@@ -13,10 +13,10 @@ pipeline {
             steps {
                 echo 'Deploying WeatherApp to NGINX...'
                 sh '''
-                sudo systemctl stop nginx
-                sudo rm -rf /usr/share/nginx/html/*
-                sudo cp -r * /usr/share/nginx/html/
-                sudo systemctl start nginx
+                systemctl stop nginx || true
+                rm -rf /usr/share/nginx/html/*
+                cp -r * /usr/share/nginx/html/
+                systemctl start nginx || true
                 '''
             }
         }
