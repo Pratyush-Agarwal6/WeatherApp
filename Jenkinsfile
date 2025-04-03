@@ -15,7 +15,7 @@ pipeline {
                 bat '''
                 rmdir /s /q C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
                 mkdir C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
-                xcopy /E /I * C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\
+                xcopy /E /I Weather-main\\* C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\
                 '''
             }
         }
