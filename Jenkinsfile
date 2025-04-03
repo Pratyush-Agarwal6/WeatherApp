@@ -13,12 +13,9 @@ pipeline {
             steps {
                 echo 'Deploying WeatherApp to NGINX...'
                 bat '''
-                rmdir /s /q C:\\nginx\\html
-                mkdir C:\\nginx\\html
-                xcopy /E /I *.html C:\\nginx\\html\\
-                xcopy /E /I *.css C:\\nginx\\html\\
-                xcopy /E /I *.js C:\\nginx\\html\\
-                xcopy /E /I *.jpg C:\\nginx\\html\\
+                rmdir /s /q C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
+                mkdir C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
+                xcopy /E /I * C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\
                 '''
             }
         }
