@@ -22,11 +22,11 @@ body {
 .container {
   max-width: 800px;
   width: 100%;
-  background-color: rgba(76, 118, 119, 0.5); /* Increased transparency */
+  background-color: rgba(255, 87, 34, 0.8); /* 🔴 Changed to a bright orange shade for visibility */
   color: #fff;
   border-radius: 25px;
-  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.35); /* Increased shadow */
-  padding: 20px; /* Added padding for better spacing */
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.35);
+  padding: 20px;
 }
 
 .wrapper {
@@ -85,16 +85,12 @@ body {
   padding: 1.5rem;
 }
 
-.content_section form {
-  margin: 1.5rem 0;
-  position: relative;
-}
-
+/* 🔵 Modified form input to have a noticeable blue border */
 .content_section form input {
   width: 84%;
   outline: none;
   background: transparent;
-  border: 1px solid #37474f;
+  border: 2px solid #2979ff;
   border-radius: 5px;
   padding: 0.7rem 1rem;
   font-family: inherit;
@@ -102,12 +98,12 @@ body {
   font-size: 1.5rem;
 }
 
-/* Added hover and focus effect */
 .content_section form input:focus {
-  border-color: #31af85;
-  box-shadow: 0 0 10px rgba(49, 175, 133, 0.8);
+  border-color: #ff4081;
+  box-shadow: 0 0 10px rgba(255, 64, 129, 0.8); /* Pink glow effect */
 }
 
+/* 🟢 Made the submit button green for visibility */
 .content_section form button {
   position: absolute;
   top: 0;
@@ -119,15 +115,14 @@ body {
   font-size: 1.2rem;
   outline: none;
   border: none;
-  background: #31af85;
+  background: #4caf50;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 }
 
-/* Button hover effect */
 .content_section form button:hover {
-  background: #29a572;
+  background: #388e3c;
 }
 
 .day_info .content {
