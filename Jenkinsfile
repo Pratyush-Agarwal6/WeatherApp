@@ -3,12 +3,13 @@ pipeline {
 
     environment {
         GIT_REPO = 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'  // Replace with your repo URL
+        BRANCH = 'main'  // Set the branch name to main
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git url: "${GIT_REPO}"
+                git url: "${GIT_REPO}", branch: "${BRANCH}"
             }
         }
 
