@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "C:\\Users\\91809\\.kube\\config"  // Set the path to your kubeconfig file
+        KUBECONFIG = "C:\\Users\\91809\\.kube\\config"
     }
 
     stages {
         stage('Checkout SCM') {
             steps {
                 echo 'Checking out Git repository...'
-                git 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
+                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
 
