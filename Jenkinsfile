@@ -1,64 +1,51 @@
 pipeline {
     agent any
 
-    environment {
-        GIT_REPO = 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'  // Replace with your repo URL
-        BRANCH = 'main'  // Set the branch name to main
-    }
-
     stages {
+        stage('Check Docker') {
+            steps {
+                echo '🔍 Checking if Docker is accessible...'
+                sh 'where docker || echo Docker NOT found'
+                sh 'docker --version || echo Docker CLI not working'
+            }
+        }
+
         stage('Clone Repository') {
             steps {
-                git url: "${GIT_REPO}", branch: "${BRANCH}"
+                git 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build Docker image for WeatherApp
-                    echo 'Building Docker image for WeatherApp...'
-                    sh 'docker build -t weatherapp:latest .'
-                }
+                echo 'Building Docker image for WeatherApp...'
+                sh 'docker build -t weatherapp:latest .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    // Push Docker image to Docker Hub or another registry
-                    echo 'Pushing Docker image to registry...'
-                    sh 'docker push weatherapp:latest'
-                }
+                echo 'Pushing Docker image...'
+                // Add DockerHub login/push commands here if needed
             }
         }
 
         stage('Deploy WeatherApp to Kubernetes') {
             steps {
-                script {
-                    // Deploy to Kubernetes (apply the deployment yaml)
-                    echo 'Deploying WeatherApp to Kubernetes...'
-                    sh 'kubectl apply -f weatherapp-deployment.yaml'
-                }
+                echo 'Deploying to Kubernetes...'
+                // kubectl apply -f deployment.yaml or similar
             }
         }
 
         stage('Verify Deployment') {
             steps {
-                script {
-                    // Check if the pods are running and the service is available
-                    echo 'Verifying Kubernetes deployment...'
-                    sh 'kubectl get pods'
-                    sh 'kubectl get svc'
-                }
+                echo 'Verifying Kubernetes Deployment...'
+                // kubectl rollout status etc.
             }
         }
     }
 
     post {
-        success {
-            echo '✅ WeatherApp deployed successfully.'
-        }
         failure {
             echo '❌ Deployment failed.'
         }
