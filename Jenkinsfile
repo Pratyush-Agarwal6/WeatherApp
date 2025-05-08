@@ -18,7 +18,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning GitHub repository...'
-                git 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
+                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
 
