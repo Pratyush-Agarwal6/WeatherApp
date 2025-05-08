@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GIT_REPO = 'https://github.com/your-username/your-weatherapp-repo.git'
-        TERRAFORM_DIR = 'terraform'
+        GIT_REPO = 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
     }
 
     stages {
@@ -13,25 +12,30 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
+        stage('Build Docker Image') {
             steps {
-                dir("${TERRAFORM_DIR}") {
-                    sh 'terraform init'
+                script {
+                    // Build Docker image for WeatherApp
+                    sh 'docker build -t weatherapp:latest .'
                 }
             }
         }
 
-        stage('Terraform Apply') {
+        stage('Push Docker Image') {
             steps {
-                dir("${TERRAFORM_DIR}") {
-                    sh 'terraform apply -auto-approve'
+                script {
+                    // Push Docker image to Docker Hub or another registry
+                    sh 'docker push weatherapp:latest'
                 }
             }
         }
 
-        stage('Deploy WeatherApp') {
+        stage('Deploy WeatherApp to Kubernetes') {
             steps {
-                sh 'echo "Deployed to Kubernetes NGINX via Terraform"'
+                script {
+                    // Deploy to Kubernetes (apply the deployment yaml)
+                    sh 'kubectl apply -f weatherapp-deployment.yaml'
+                }
             }
         }
     }
