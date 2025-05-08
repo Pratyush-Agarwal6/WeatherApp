@@ -1,23 +1,47 @@
 pipeline {
     agent any
 
+    environment {
+        GIT_REPO = 'https://github.com/your-username/your-weatherapp-repo.git'
+        TERRAFORM_DIR = 'terraform'
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                echo 'Cloning repository...'
-                git branch: 'main', url: 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
+                git url: "${GIT_REPO}"
             }
         }
 
-        stage('Deploy to NGINX') {
+        stage('Terraform Init') {
             steps {
-                echo 'Deploying WeatherApp to NGINX...'
-                bat '''
-                rmdir /s /q C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
-                mkdir C:\\nginx\\nginx-1.27.4\\html\\WeatherApp
-                xcopy /E /I Weather-main\\* C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\
-                '''
+                dir("${TERRAFORM_DIR}") {
+                    sh 'terraform init'
+                }
             }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                dir("${TERRAFORM_DIR}") {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Deploy WeatherApp') {
+            steps {
+                sh 'echo "Deployed to Kubernetes NGINX via Terraform"'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ WeatherApp deployed successfully.'
+        }
+        failure {
+            echo '❌ Deployment failed.'
         }
     }
 }
