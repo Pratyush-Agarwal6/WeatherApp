@@ -1,25 +1,31 @@
 pipeline {
     agent any
-
+    
     environment {
-        K8S_CONFIG = '/path/to/your/kubeconfig' // Set this path if needed
+        KUBECONFIG = "C:\\Users\\YourUserName\\.kube\\config" // Set your kubeconfig path here
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
-                // Clone your repository
-                git 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
+                checkout scm
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy WeatherApp to Kubernetes') {
             steps {
                 script {
-                    // Apply the Kubernetes deployment (assuming you have your YAML files for deployment)
+                    // Ensure kubectl is installed and the Kubernetes context is set
+                    sh 'kubectl config use-context docker-desktop'
+                    
+                    // Apply Kubernetes YAML files for deployment
                     sh '''
-                    kubectl --kubeconfig=${K8S_CONFIG} apply -f kubernetes/deployment.yaml
-                    kubectl --kubeconfig=${K8S_CONFIG} apply -f kubernetes/service.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\deployment.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\service.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\jenkins-deployment.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\jenkins-pv.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\jenkins-pvc.yaml
+                        kubectl apply -f C:\\nginx\\nginx-1.27.4\\html\\WeatherApp\\jenkins-service.yaml
                     '''
                 }
             }
@@ -28,16 +34,19 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    // Verify that the WeatherApp is running in the Kubernetes cluster
-                    sh 'kubectl --kubeconfig=${K8S_CONFIG} get pods'
+                    // Verify that the WeatherApp pods are running
+                    sh 'kubectl get pods'
                 }
             }
         }
     }
+    
     post {
-        always {
-            // Notify about the status of the pipeline (Success or Failure)
-            echo "Pipeline finished."
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
