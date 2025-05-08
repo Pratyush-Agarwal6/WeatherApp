@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Define any environment variables here if needed
+        DOCKER_IMAGE = 'weatherapp:latest'
+    }
+
     stages {
         stage('Check Docker') {
             steps {
@@ -12,6 +17,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
+                echo 'Cloning GitHub repository...'
                 git 'https://github.com/Pratyush-Agarwal6/WeatherApp.git'
             }
         }
@@ -19,28 +25,34 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image for WeatherApp...'
-                sh 'docker build -t weatherapp:latest .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
         stage('Push Docker Image') {
             steps {
                 echo 'Pushing Docker image...'
-                // Add DockerHub login/push commands here if needed
+                // Uncomment and replace the following lines with your DockerHub login and push commands
+                // withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                //     sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
+                //     sh "docker push $DOCKER_IMAGE"
+                // }
             }
         }
 
         stage('Deploy WeatherApp to Kubernetes') {
             steps {
-                echo 'Deploying to Kubernetes...'
-                // kubectl apply -f deployment.yaml or similar
+                echo 'Deploying WeatherApp to Kubernetes...'
+                // Ensure kubectl is configured on Jenkins and kubeconfig is available
+                sh 'kubectl apply -f k8s/deployment.yaml'
             }
         }
 
         stage('Verify Deployment') {
             steps {
                 echo 'Verifying Kubernetes Deployment...'
-                // kubectl rollout status etc.
+                // Wait for the deployment to complete
+                sh 'kubectl rollout status deployment/weatherapp'
             }
         }
     }
@@ -48,6 +60,10 @@ pipeline {
     post {
         failure {
             echo '❌ Deployment failed.'
+        }
+
+        success {
+            echo '✅ Deployment successful.'
         }
     }
 }
